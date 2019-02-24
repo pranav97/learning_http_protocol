@@ -42,7 +42,7 @@ def log_headers(func):
         ret_val = func(*args, **kwargs)
         header_str = ""
         for key, value in request.headers.to_wsgi_list():
-            header_str += "{}: {}, ".format(key, value)
+            header_str += "<p>{}: {}</p>".format(key, value)
         logs.addHeader(SingleHeader(header_str))
         return ret_val
     return wrapper
