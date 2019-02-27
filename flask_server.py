@@ -9,18 +9,10 @@ auth = HTTPBasicAuth()
 
 logs = None
 
-class LogsSystem:
-    all_logs = []
-
-    def addHeader(self, single_head):
-        self.all_logs.append(single_head)
-
-    def get_html(self):
-        html_list = """"""
-        for i in self.all_logs:
-            html_list += """<li><p class="date"> {} </p><p> {} </p></li>""".format(i.local_time, i.headers_string)
-        return html_list
-
+users = {
+    "pranav": "slug",
+    "user": "easy"
+}
 
 class SingleHeader:
     headers_string = ""
@@ -30,11 +22,18 @@ class SingleHeader:
         self.headers_string = header_str
 
 
+class LogsSystem:
+    all_logs = [] # the whole point of this all logs is to store a bunch of headers
 
-users = {
-    "pranav": "slug",
-    "user": "easy"
-}
+    def addHeader(self, single_head):
+        self.all_logs.append(single_head)
+
+    def get_html(self):
+        html_list = ""
+        for i in self.all_logs:
+            html_list += """<li><p class="date"> {} </p><p> {} </p></li>""".format(i.local_time, i.headers_string)
+        return html_list
+
 
 def log_headers(func):
     @functools.wraps(func)
@@ -65,8 +64,6 @@ def print_all_logs():
         {}
     <ul>
     """.format(logs.get_html())
-
-
 
 
 @app.route('/')
