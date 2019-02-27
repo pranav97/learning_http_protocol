@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, City
 
-app = Flask(__name__)
+app = Flask(__name__,  static_url_path='')
 
 
 engine = create_engine('sqlite:///city.db')
@@ -118,6 +118,12 @@ def print_all_logs():
 def index():
     return "<h1>Hello, %s!</h1>" % auth.username()
 
+
+@app.route('/random')
+@auth.login_required
+@LogsSystem.log_headers
+def cities_home():
+    return app.send_static_file('index.html')
 
 if __name__ == '__main__':
     logs = LogsSystem()
