@@ -1,11 +1,11 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, send_from_directory, jsonify
 from flask_httpauth import HTTPBasicAuth
 import time, functools, json
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, City
 
-app = Flask(__name__,  static_url_path='')
+app = Flask(__name__)
 
 
 engine = create_engine('sqlite:///city.db')
@@ -78,7 +78,8 @@ def postCityName():
     session = DBSession()
     if request.method == 'POST':
         addCity(request.form['name'])
-        return json.dumps({"worked":"True"}), 201
+        data = {"Worked": "True"}
+        return jsonify(data), 201
     else:
         return render_template('newCity.html')
 
@@ -117,13 +118,6 @@ def print_all_logs():
 @LogsSystem.log_headers
 def index():
     return "<h1>Hello, %s!</h1>" % auth.username()
-
-
-@app.route('/random')
-@auth.login_required
-@LogsSystem.log_headers
-def cities_home():
-    return app.send_static_file('index.html')
 
 if __name__ == '__main__':
     logs = LogsSystem()
